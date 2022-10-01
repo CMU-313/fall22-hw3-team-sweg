@@ -2,6 +2,10 @@ name: Maven CI/CD
 
 on:
   push:
+    branches:
+      - 'main'
+    tags: [v*]
+  pull_request:
     branches: 
       - 'main'
     tags: [v*]
@@ -59,7 +63,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: badges
           force: true
-
-
-
-     
