@@ -79,7 +79,8 @@ public class AppContext {
         // Start indexing handler
         try {
             List<Class<? extends IndexingHandler>> indexingHandlerList = Lists.newArrayList(
-                    new ClasspathScanner<IndexingHandler>().findClasses(IndexingHandler.class, "com.sismics.docs.core.util.indexing"));
+                    new ClasspathScanner<IndexingHandler>().findClasses(IndexingHandler.class,
+                            "com.sismics.docs.core.util.indexing"));
             for (Class<? extends IndexingHandler> handlerClass : indexingHandlerList) {
                 IndexingHandler handler = handlerClass.getDeclaredConstructor().newInstance();
                 if (handler.accept()) {
@@ -140,6 +141,9 @@ public class AppContext {
         asyncEventBus.register(new DocumentCreatedAsyncListener());
         asyncEventBus.register(new DocumentUpdatedAsyncListener());
         asyncEventBus.register(new DocumentDeletedAsyncListener());
+        asyncEventBus.register(new DocumentAssignedAsyncListener());
+        asyncEventBus.register(new DocumentCommentedAsyncListener());
+        asyncEventBus.register(new DocumentReviewedAsyncListener());
         asyncEventBus.register(new RebuildIndexAsyncListener());
         asyncEventBus.register(new AclCreatedAsyncListener());
         asyncEventBus.register(new AclDeletedAsyncListener());
@@ -216,7 +220,8 @@ public class AppContext {
 
     public void shutDown() {
         for (ExecutorService executor : asyncExecutorList) {
-            // Shutdown executor, don't accept any more tasks (can cause error with nested events)
+            // Shutdown executor, don't accept any more tasks (can cause error with nested
+            // events)
             try {
                 executor.shutdown();
                 executor.awaitTermination(1, TimeUnit.MINUTES);
