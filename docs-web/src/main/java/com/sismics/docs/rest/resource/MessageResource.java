@@ -1,14 +1,16 @@
 package com.sismics.docs.rest.resource;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.json.Json;
-import javax.json.JsonObjectBuilder;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.container.TimeoutHandler;
 import javax.ws.rs.core.Response;
 
+import com.sismics.docs.core.listener.async.MessageAsyncListener;
 import com.sismics.rest.exception.ForbiddenClientException;
 
 /**
@@ -34,6 +36,18 @@ public class MessageResource extends BaseResource {
             throws InterruptedException {
         if (!authenticate()) {
             throw new ForbiddenClientException();
+        }
+
+        String userId = principal.getId();
+        // TODO (Kyungmin): Fetch the number of unread messages
+        int unreadCount = 0;
+        if (unreadCount > 0) {
+            JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
+            asyncResponse.resume(Response.ok().entity(responseObj).build());
+        } else if (MessageAsyncListener.isClientRegistered(userId)) {
+            asyncResponse.cancel();
+        } else {
+            MessageAsyncListener.registerClient(userId, asyncResponse);
         }
     }
 }

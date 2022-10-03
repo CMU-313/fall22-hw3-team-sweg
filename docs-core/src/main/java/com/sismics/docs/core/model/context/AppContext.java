@@ -141,9 +141,7 @@ public class AppContext {
         asyncEventBus.register(new DocumentCreatedAsyncListener());
         asyncEventBus.register(new DocumentUpdatedAsyncListener());
         asyncEventBus.register(new DocumentDeletedAsyncListener());
-        asyncEventBus.register(new DocumentAssignedAsyncListener());
-        asyncEventBus.register(new DocumentCommentedAsyncListener());
-        asyncEventBus.register(new DocumentReviewedAsyncListener());
+        asyncEventBus.register(new MessageAsyncListener());
         asyncEventBus.register(new RebuildIndexAsyncListener());
         asyncEventBus.register(new AclCreatedAsyncListener());
         asyncEventBus.register(new AclDeletedAsyncListener());
