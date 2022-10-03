@@ -7,6 +7,7 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
 
+import com.sismics.docs.core.dao.MessageDao;
 import com.sismics.docs.core.listener.async.MessageAsyncListener;
 import com.sismics.rest.exception.ForbiddenClientException;
 
@@ -35,8 +36,8 @@ public class MessageResource extends BaseResource {
         }
 
         String userId = principal.getId();
-        // TODO (Kyungmin): Fetch the number of unread messages
-        int unreadCount = 0;
+        MessageDao messageDao = new MessageDao();
+        int unreadCount = messageDao.getUnreadMsgCount(userId);
         if (unreadCount > 0) {
             JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
             asyncResponse.resume(Response.ok().entity(responseObj).build());

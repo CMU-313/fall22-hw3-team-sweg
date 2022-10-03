@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import com.sismics.docs.core.dao.MessageDao;
 import com.sismics.docs.core.event.DocumentAssignedAsyncEvent;
 import com.sismics.docs.core.event.DocumentCommentedAsyncEvent;
 import com.sismics.docs.core.event.DocumentReviewedAsyncEvent;
@@ -118,8 +119,8 @@ public class MessageAsyncListener {
         if (asyncResponse == null) {
             return;
         }
-        // TODO (Kyungmin): Fetch the number of unread messages
-        int unreadCount = 1;
+        MessageDao messageDao = new MessageDao();
+        int unreadCount = messageDao.getUnreadMsgCount(userId);
         if (unreadCount > 0) {
             JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
             asyncResponse.resume(Response.ok().entity(responseObj).build());

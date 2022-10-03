@@ -42,4 +42,16 @@ public class MessageDao {
         em.persist(message);
         return message.getId();
     }
+
+    /**
+     * Extracts unread message counts.
+     * 
+     * @param userId User ID
+     * @return Number of unread messages
+     */
+    public int getUnreadMsgCount(String userId) {
+        EntityManager em = ThreadLocalContext.get().getEntityManager();
+        Query q = em.createQuery("select count(m) from Message m where m.id = :userId and m.isRead = False");
+        return (int) q.getSingleResult();
+    }
 }
