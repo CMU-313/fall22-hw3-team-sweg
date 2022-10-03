@@ -30,7 +30,7 @@ public class Message implements Loggable {
     /**
      * Document ID.
      */
-    @Column(name = "MSG_IDDOCUMENT_C", nullable = false, length = 36)
+    @Column(name = "MSG_IDDOCUMENT_C", length = 36)
     private String documentId;
 
     /**
@@ -60,7 +60,7 @@ public class Message implements Loggable {
     /**
      * Deletion time.
      */
-    @Column(name = "MSG_DELETETIME_D", nullable = false)
+    @Column(name = "MSG_DELETETIME_D")
     private Date deleteDate;
 
     public String getId() {

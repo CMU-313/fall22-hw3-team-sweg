@@ -1,21 +1,23 @@
 package com.sismics.docs.core.dao.jpa;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.sismics.docs.BaseTransactionalTest;
 import com.sismics.docs.core.dao.UserDao;
 import com.sismics.docs.core.model.jpa.User;
 import com.sismics.docs.core.util.TransactionUtil;
 import com.sismics.docs.core.util.authentication.InternalAuthenticationHandler;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
- * Tests the persistance layer.
- * 
- * @author jtremeaux
+ * Tests the user JPA.
  */
-public class TestJpa extends BaseTransactionalTest {
+public class TestUser extends BaseTransactionalTest {
+    /**
+     * Tests the user JPA.
+     */
     @Test
-    public void testJpa() throws Exception {
+    public void testUser() throws Exception {
         // Create a user
         UserDao userDao = new UserDao();
         User user = new User();
@@ -25,7 +27,7 @@ public class TestJpa extends BaseTransactionalTest {
         user.setRoleId("admin");
         user.setStorageQuota(10L);
         String id = userDao.create(user, "me");
-        
+
         TransactionUtil.commit();
 
         // Search a user by his ID
