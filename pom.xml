@@ -39,6 +39,7 @@
     <joda-time.joda-time.version>2.10.9</joda-time.joda-time.version>
     <org.hibernate.hibernate.version>5.4.27.Final</org.hibernate.hibernate.version>
     <javax.servlet.javax.servlet-api.version>4.0.1</javax.servlet.javax.servlet-api.version>
+    <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
     <fr.opensagres.xdocreport.version>2.0.2</fr.opensagres.xdocreport.version>
     <net.java.dev.jna.jna.version>5.6.0</net.java.dev.jna.jna.version>
     <com.twelvemonkeys.imageio.version>3.6.2</com.twelvemonkeys.imageio.version>
@@ -200,6 +201,12 @@
         <version>${javax.servlet.javax.servlet-api.version}</version>
       </dependency>
       
+      <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>javax.ws.rs-api</artifactId>
+        <version>${javax.ws.rs-api.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-compress</artifactId>

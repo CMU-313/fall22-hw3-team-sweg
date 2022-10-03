@@ -3,10 +3,14 @@ package com.sismics.docs.rest.resource;
 import com.sismics.docs.core.constant.PermType;
 import com.sismics.docs.core.dao.AclDao;
 import com.sismics.docs.core.dao.CommentDao;
+import com.sismics.docs.core.dao.DocumentDao;
 import com.sismics.docs.core.dao.dto.CommentDto;
+import com.sismics.docs.core.event.DocumentCommentedAsyncEvent;
 import com.sismics.docs.core.model.jpa.Comment;
+import com.sismics.docs.core.model.jpa.Document;
 import com.sismics.rest.exception.ForbiddenClientException;
 import com.sismics.rest.util.ValidationUtil;
+import com.sismics.util.context.ThreadLocalContext;
 import com.sismics.util.ImageUtil;
 
 import javax.json.Json;
@@ -43,7 +47,7 @@ public class CommentResource extends BaseResource {
      * @apiVersion 1.5.0
      * 
      * @param documentId Document ID
-     * @param content Comment content
+     * @param content    Comment content
      * @return Response
      */
     @PUT
@@ -52,17 +56,17 @@ public class CommentResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
-        
+
         // Validate input data
         ValidationUtil.validateRequired(documentId, "id");
         content = ValidationUtil.validateLength(content, "content", 1, 4000, false);
-        
-        // Read access on doc gives access to write comments 
+
+        // Read access on doc gives access to write comments
         AclDao aclDao = new AclDao();
         if (!aclDao.checkPermission(documentId, PermType.READ, getTargetIdList(null))) {
             throw new NotFoundException();
         }
-        
+
         // Create the comment
         Comment comment = new Comment();
         comment.setDocumentId(documentId);
@@ -70,7 +74,15 @@ public class CommentResource extends BaseResource {
         comment.setUserId(principal.getId());
         CommentDao commentDao = new CommentDao();
         commentDao.create(comment, principal.getId());
-        
+
+        // Raise a document commented event
+        Document document = new DocumentDao().getById(documentId);
+        DocumentCommentedAsyncEvent documentCommentedAsyncEvent = new DocumentCommentedAsyncEvent();
+        documentCommentedAsyncEvent.setUserId(principal.getId());
+        documentCommentedAsyncEvent.setDocumentId(documentId);
+        documentCommentedAsyncEvent.setOwnerId(document.getUserId());
+        ThreadLocalContext.get().addAsyncEvent(documentCommentedAsyncEvent);
+
         // Returns the comment
         JsonObjectBuilder response = Json.createObjectBuilder()
                 .add("id", comment.getId())
@@ -80,7 +92,7 @@ public class CommentResource extends BaseResource {
                 .add("create_date", comment.getCreateDate().getTime());
         return Response.ok().entity(response.build()).build();
     }
-    
+
     /**
      * Delete a comment.
      *
@@ -103,14 +115,14 @@ public class CommentResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
-        
+
         // Get the comment
         CommentDao commentDao = new CommentDao();
         Comment comment = commentDao.getActiveById(id);
         if (comment == null) {
             throw new NotFoundException();
         }
-        
+
         // If the current user owns the comment, skip ACL check
         if (!comment.getUserId().equals(principal.getId())) {
             // Get the associated document
@@ -119,16 +131,16 @@ public class CommentResource extends BaseResource {
                 throw new NotFoundException();
             }
         }
-        
+
         // Delete the comment
         commentDao.delete(id, principal.getId());
-        
+
         // Always return OK
         JsonObjectBuilder response = Json.createObjectBuilder()
                 .add("status", "ok");
         return Response.ok().entity(response.build()).build();
     }
-    
+
     /**
      * Get all comments on a document.
      *
@@ -155,13 +167,13 @@ public class CommentResource extends BaseResource {
     public Response get(@PathParam("documentId") String documentId,
             @QueryParam("share") String shareId) {
         authenticate();
-        
-        // Read access on doc gives access to read comments 
+
+        // Read access on doc gives access to read comments
         AclDao aclDao = new AclDao();
         if (!aclDao.checkPermission(documentId, PermType.READ, getTargetIdList(shareId))) {
             throw new NotFoundException();
         }
-        
+
         // Assemble results
         CommentDao commentDao = new CommentDao();
         List<CommentDto> commentDtoList = commentDao.getByDocumentId(documentId);
@@ -174,7 +186,7 @@ public class CommentResource extends BaseResource {
                     .add("creator_gravatar", ImageUtil.computeGravatar(commentDto.getCreatorEmail()))
                     .add("create_date", commentDto.getCreateTimestamp()));
         }
-        
+
         // Always return OK
         JsonObjectBuilder response = Json.createObjectBuilder()
                 .add("comments", comments);
