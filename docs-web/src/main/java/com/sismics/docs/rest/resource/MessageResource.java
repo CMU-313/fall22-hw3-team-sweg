@@ -1,8 +1,5 @@
 package com.sismics.docs.rest.resource;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -18,7 +15,6 @@ import com.sismics.rest.exception.ForbiddenClientException;
  */
 @Path("/messages")
 public class MessageResource extends BaseResource {
-
     /**
      * Long poll the number of unread messages until there is one.
      *

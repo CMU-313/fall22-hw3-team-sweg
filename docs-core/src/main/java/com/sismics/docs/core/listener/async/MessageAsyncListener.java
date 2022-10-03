@@ -1,19 +1,22 @@
 package com.sismics.docs.core.listener.async;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import com.sismics.docs.core.event.DocumentAssignedAsyncEvent;
 import com.sismics.docs.core.event.DocumentCommentedAsyncEvent;
 import com.sismics.docs.core.event.DocumentReviewedAsyncEvent;
 import com.sismics.docs.core.util.TransactionUtil;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.core.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Listener on messages.
@@ -56,9 +59,7 @@ public class MessageAsyncListener {
     @Subscribe
     @AllowConcurrentEvents
     public void on(final DocumentCommentedAsyncEvent event) {
-        if (log.isInfoEnabled()) {
-            log.info("Document commented event: " + event.toString());
-        }
+        log.info("Document commented event: " + event.toString());
 
         TransactionUtil.handle(() -> {
             // TODO (Kyungmin): Create a message entity for the comment
