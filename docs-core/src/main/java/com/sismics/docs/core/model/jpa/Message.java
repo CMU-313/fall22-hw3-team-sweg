@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.google.common.base.MoreObjects;
+import com.sismics.docs.core.constant.MessageType;
 
 /**
  * Message entity.
@@ -24,7 +25,7 @@ public class Message implements Loggable {
      */
     @Column(name = "MSG_TYPE_C", nullable = false, length = 40)
     @Enumerated(EnumType.STRING)
-    private String type;
+    private MessageType type;
 
     /**
      * Document ID.
@@ -48,13 +49,13 @@ public class Message implements Loggable {
      * Is read.
      */
     @Column(name = "MSG_ISREAD_B", nullable = false)
-    private boolean isRead;
+    private boolean isRead = false;
 
     /**
      * Creation time.
      */
     @Column(name = "MSG_CREATETIME_D", nullable = false)
-    private Date createDate;
+    private Date createDate = new Date();
 
     /**
      * Deletion time.
@@ -70,11 +71,11 @@ public class Message implements Loggable {
         this.id = id;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
 
-    public void setType(final String type) {
+    public void setType(final MessageType type) {
         this.type = type;
     }
 
@@ -131,7 +132,7 @@ public class Message implements Loggable {
     public String toMessage() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("type", type)
+                .add("type", type.name())
                 .toString();
     }
 
@@ -139,7 +140,7 @@ public class Message implements Loggable {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("type", type)
+                .add("type", type.name())
                 .add("documentId", documentId)
                 .add("senderId", senderId)
                 .add("receiverId", receiverId)
