@@ -7,12 +7,10 @@ import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import com.sismics.docs.core.dao.MessageDao;
 import com.sismics.docs.core.dao.criteria.MessageCriteria;
@@ -60,6 +58,11 @@ public class MessageResource extends BaseResource {
         }
 
         JsonArrayBuilder messages = Json.createArrayBuilder();
+        if (sortColumn == null) {
+            // Sort by timestamp by default
+            sortColumn = 4;
+            asc = false;
+        }
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
         MessageCriteria messageCriteria = new MessageCriteria(type, isRead);
 
@@ -113,9 +116,10 @@ public class MessageResource extends BaseResource {
     /**
      * Read a message.
      * 
-     * @api {post} /messages/:id/read Read a message.
+     * @api {post} /messages/read Read a message.
      * @apiName PostMessageRead
      * @apiGroup Messages
+     * @apiParam {String} id Message ID
      * @apiSuccess {String} status Status OK
      * @apiError (client) ForbiddenError Access denied
      * @apiError (client) NotFound Message not found
@@ -126,22 +130,18 @@ public class MessageResource extends BaseResource {
      * @return Response
      */
     @POST
-    @Path("{id: [a-z0-9\\-]+}/read")
-    public Response read(@PathParam("id") String msgId) {
+    @Path("read")
+    public Response read(@FormParam("id") String msgId) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
 
         String userId = principal.getId();
         MessageDao messageDao = new MessageDao();
-        boolean read = messageDao.read(msgId, userId);
-        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
-        JsonObject responseObj;
-        if (read) {
-            responseObj = jsonBuilder.add("status", "ok").build();
-            return Response.ok().entity(jsonBuilder).build();
+        if (!messageDao.read(msgId, userId)) {
+            throw new NotFoundException();
         }
-        responseObj = jsonBuilder.add("status", "message does not exist").build();
-        return Response.status(Status.NOT_FOUND).entity(responseObj).build();
+        JsonObject responseObj = Json.createObjectBuilder().add("status", "ok").build();
+        return Response.ok().entity(responseObj).build();
     }
 }

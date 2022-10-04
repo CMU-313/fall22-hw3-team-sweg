@@ -19,7 +19,6 @@ import com.sismics.docs.core.model.jpa.Message;
 import com.sismics.docs.core.util.jpa.QueryParam;
 import com.sismics.docs.core.util.jpa.QueryUtil;
 import com.sismics.docs.core.util.jpa.SortCriteria;
-
 import com.sismics.util.context.ThreadLocalContext;
 
 /**
@@ -98,20 +97,20 @@ public class MessageDao {
         Map<String, Object> parameterMap = new HashMap<String, Object>();
 
         StringBuilder sb = new StringBuilder(
-                "select m.id, m.type, u.username, m.isRead, m.createDate From Message m Join User u on u.id = m.senderId");
-        criteriaList.add("m.receiverId = :userId");
+                "select m.MSG_ID_C as c0, m.MSG_TYPE_C as c1, u.USE_USERNAME_C as c2, m.MSG_ISREAD_B as c3, m.MSG_CREATETIME_D as c4 from T_MESSAGES m join T_USER u on u.USE_ID_C = m.MSG_IDSENDER_C");
+        criteriaList.add("m.MSG_IDRECEIVER_C = :userId");
         parameterMap.put("userId", userId);
 
         Boolean isRead = criteria.getIsRead();
         if (isRead != null) {
-            criteriaList.add("m.isRead = :isRead");
+            criteriaList.add("m.MSG_ISREAD_B = :isRead");
             parameterMap.put("isRead", isRead);
         }
 
         MessageType msgType = criteria.getType();
         if (msgType != null) {
-            criteriaList.add("m.type = :msgType");
-            parameterMap.put("msgType", msgType);
+            criteriaList.add("m.MSG_TYPE_C = :msgType");
+            parameterMap.put("msgType", msgType.name());
         }
 
         sb.append(" where ");
@@ -127,7 +126,7 @@ public class MessageDao {
             int i = 0;
             MessageDto messageDto = new MessageDto()
                     .setId((String) o[i++])
-                    .setType((MessageType) o[i++])
+                    .setType(MessageType.valueOf((String) o[i++]))
                     .setSender((String) o[i++])
                     .setIsRead((boolean) o[i++])
                     .setTimestamp((Date) o[i++]);
