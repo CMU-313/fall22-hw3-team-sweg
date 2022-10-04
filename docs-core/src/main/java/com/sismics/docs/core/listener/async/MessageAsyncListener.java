@@ -17,6 +17,9 @@ import com.sismics.docs.core.event.DocumentAssignedAsyncEvent;
 import com.sismics.docs.core.event.DocumentCommentedAsyncEvent;
 import com.sismics.docs.core.event.DocumentReviewedAsyncEvent;
 import com.sismics.docs.core.util.TransactionUtil;
+import com.sismics.docs.core.dao.MessageDao;
+import com.sismics.docs.core.constant.MessageType;
+import com.sismics.docs.core.model.jpa.Message;
 
 /**
  * Listener on messages.
