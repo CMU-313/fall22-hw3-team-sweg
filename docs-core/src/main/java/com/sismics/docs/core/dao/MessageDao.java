@@ -1,11 +1,18 @@
 package com.sismics.docs.core.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.google.common.base.Joiner;
+import com.sismics.docs.core.constant.MessageType;
 import com.sismics.docs.core.dao.criteria.MessageCriteria;
 import com.sismics.docs.core.dao.dto.MessageDto;
 import com.sismics.docs.core.model.jpa.Message;
@@ -57,7 +64,8 @@ public class MessageDao {
      */
     public int getUnreadMsgCount(String userId) {
         EntityManager em = ThreadLocalContext.get().getEntityManager();
-        Query q = em.createQuery("select count(m) from Message m where m.receiverId = :userId and m.isRead = False and m.deleteDate is null");
+        Query q = em.createQuery(
+                "select count(m) from Message m where m.receiverId = :userId and m.isRead = False and m.deleteDate is null");
         q.setParameter("userId", userId);
         return ((Long) q.getSingleResult()).intValue();
     }
@@ -65,7 +73,7 @@ public class MessageDao {
     /**
      * Change status when message is read.
      * 
-     * @param msgId Message ID
+     * @param msgId  Message ID
      * @param userId User Id
      * @return Existence of message
      */
@@ -78,58 +86,53 @@ public class MessageDao {
         return true;
     }
 
-
-     /**
+    /**
      * Returns the list of all messages.
      * 
-     * @param criteria Search criteria
+     * @param criteria     Search criteria
      * @param sortCriteria Sort criteria
      * @return List of all the messages for a user.
      */
     public List<MessageDto> findByCriteria(String userId, MessageCriteria criteria, SortCriteria sortCriteria) {
-        Map<String, Object> parameterMap = new HashMap<>();
-        List<String> criteriaList = new ArrayList<>();
-        
-        StringBuilder sb = new StringBuilder("select m.id, m.type, u.username, m.isRead, m.createDate From Message m Join User u on u.id = m.senderId");
-        criteriaList.add("m.receiverId =: userId");
-        parameterMap.put("userId", userid);
-        
-        boolean isRead = criteria.getIsRead();
+        List<String> criteriaList = new ArrayList<String>();
+        Map<String, Object> parameterMap = new HashMap<String, Object>();
+
+        StringBuilder sb = new StringBuilder(
+                "select m.id, m.type, u.username, m.isRead, m.createDate From Message m Join User u on u.id = m.senderId");
+        criteriaList.add("m.receiverId = :userId");
+        parameterMap.put("userId", userId);
+
+        Boolean isRead = criteria.getIsRead();
         if (isRead != null) {
-            criteriaList.add("m.isRead =: isRead");
+            criteriaList.add("m.isRead = :isRead");
             parameterMap.put("isRead", isRead);
         }
 
         MessageType msgType = criteria.getType();
         if (msgType != null) {
-            criteriaList.add("m.type =: msgType");
-            parameterMap.put("msgType",msgType);
+            criteriaList.add("m.type = :msgType");
+            parameterMap.put("msgType", msgType);
         }
-
 
         sb.append(" where ");
         sb.append(Joiner.on(" and ").join(criteriaList));
 
-        QueryParam queryParam = QueryUtil.getSortedQueryParam(new QueryParam(sb.toString(), parameterMap), sortCriteria);
+        QueryParam queryParam = QueryUtil.getSortedQueryParam(new QueryParam(sb.toString(), parameterMap),
+                sortCriteria);
         @SuppressWarnings("unchecked")
         List<Object[]> l = QueryUtil.getNativeQuery(queryParam).getResultList();
 
         List<MessageDto> messageDtoList = new ArrayList<>();
-        List<MessageDto> userGroupDtoList = new ArrayList<>();
         for (Object[] o : l) {
             int i = 0;
             MessageDto messageDto = new MessageDto()
-                .setId((String) o[i++])
-                .setType((String) o[i++])
-                .setSender((String) o[i++])
-                .setIsRead((String) o[i++])
-                .setTimestamp((String) o[i++]);
+                    .setId((String) o[i++])
+                    .setType((MessageType) o[i++])
+                    .setSender((String) o[i++])
+                    .setIsRead((boolean) o[i++])
+                    .setTimestamp((Date) o[i++]);
             messageDtoList.add(messageDto);
-            if (criteria.getUserId() != null && o[i] != null) {
-                userGroupDtoList.add(groupDto);
-            }
         }
-
         return messageDtoList;
     }
 }
