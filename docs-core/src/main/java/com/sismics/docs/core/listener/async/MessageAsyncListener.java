@@ -46,6 +46,13 @@ public class MessageAsyncListener {
 
         TransactionUtil.handle(() -> {
             // TODO (Kyungmin): Create a message entity for the assignment
+            Message message = new Message();
+            message.setType(MessageType.DOCUMENT_ASSIGNED);
+            message.setDocumentId(event.getDocumentId());
+            message.setSenderId(event.getUserId());
+            message.setReceiverId(event.getOwnerId());
+            MessageDao messageDao = new MessageDao();
+            messageDao.create(message);
 
             sendUnreadCount(event.getAssigneeId());
         });
@@ -63,6 +70,13 @@ public class MessageAsyncListener {
 
         TransactionUtil.handle(() -> {
             // TODO (Kyungmin): Create a message entity for the comment
+            Message message = new Message();
+            message.setType(MessageType.DOCUMENT_COMMENTED);
+            message.setDocumentId(event.getDocumentId());
+            message.setSenderId(event.getUserId());
+            message.setReceiverId(event.getOwnerId());
+            MessageDao messageDao = new MessageDao();
+            messageDao.create(message);
 
             sendUnreadCount(event.getOwnerId());
         });
@@ -82,6 +96,13 @@ public class MessageAsyncListener {
 
         TransactionUtil.handle(() -> {
             // TODO (Kyungmin): Create a message entity for the review
+            Message message = new Message();
+            message.setType(MessageType.DOCUMENT_REVIEWED);
+            message.setDocumentId(event.getDocumentId());
+            message.setSenderId(event.getUserId());
+            message.setReceiverId(event.getOwnerId());
+            MessageDao messageDao = new MessageDao();
+            messageDao.create(message);
 
             sendUnreadCount(event.getOwnerId());
         });
