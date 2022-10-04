@@ -151,7 +151,7 @@
           <!--Added a new icon that is a drop down inbox for the user, guests cannot see inbox
             ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'"-->
           <li ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'">
-            <a href="#/inbox"><span class="fas fa-cog"></span> Inbox</a>
+            <a href="#/inbox"> Inbox</a>
           </li>
           <li>
             <a href="{{ userInfo.username == 'guest' ? '#/user/guest' : '#/settings/account' }}"
