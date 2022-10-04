@@ -2,15 +2,18 @@ package com.sismics.docs.rest.resource;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
+import com.sismics.docs.core.dao.MessageDao;
 import com.sismics.docs.core.listener.async.MessageAsyncListener;
 import com.sismics.rest.exception.ForbiddenClientException;
 
-/**
+/*
  * Message REST resources.
  */
 @Path("/messages")
@@ -35,8 +38,8 @@ public class MessageResource extends BaseResource {
         }
 
         String userId = principal.getId();
-        // TODO (Kyungmin): Fetch the number of unread messages
-        int unreadCount = 0;
+        MessageDao messageDao = new MessageDao();
+        int unreadCount = messageDao.getUnreadMsgCount(userId);
         if (unreadCount > 0) {
             JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
             asyncResponse.resume(Response.ok().entity(responseObj).build());
@@ -45,5 +48,25 @@ public class MessageResource extends BaseResource {
         } else {
             MessageAsyncListener.registerClient(userId, asyncResponse);
         }
+    }
+
+    @POST
+    @Path("{id: [a-z0-9\\-]+}/read")
+    public Response read(@PathParam("id") String msgId) {
+        if (!authenticate()) {
+            throw new ForbiddenClientException();
+        }
+
+        String userId = principal.getId();
+        MessageDao messageDao = new MessageDao();
+        boolean read = messageDao.read(msgId, userId);
+        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        JsonObject responseObj;
+        if (read) {
+            responseObj = jsonBuilder.add("status", "ok").build();
+            return Response.ok().entity(jsonBuilder).build();
+        }
+        responseObj = jsonBuilder.add("status", "message does not exist").build();
+        return Response.status(Status.NOT_FOUND).entity(responseObj).build();
     }
 }

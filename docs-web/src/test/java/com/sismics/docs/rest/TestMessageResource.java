@@ -50,7 +50,6 @@ public class TestMessageResource extends BaseJerseyTest {
         json = target().path("/messages/unread_count").request()
                 .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
                 .get(JsonObject.class);
-        // TODO (Kyungmin): Fix the expected value after implementing fetching the number of unread messages
         Assert.assertEquals(1, json.getInt("count"));
     }
 }
