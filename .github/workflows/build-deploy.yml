@@ -1,10 +1,6 @@
-name: Maven CI/CD
+name: Maven CD
 
 on:
-  pull_request:
-    branches: 
-      - 'main'
-    tags: [v*]
   push:
     branches:
       - 'main'
