@@ -1,1 +1,24 @@
-Inbox Skeleton
+<!--body of inbox page-->
+
+<!--calls each inbox message from backend for current user-->
+<div class="inbox-card"> 
+    <!--creates a card to better display each message-->
+    <ul class="list-group list-group-flush">
+        <div ng-repeat="name in names">
+            <!--content and other information of messages-->
+            <li class="list-group-item">
+                <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
+                <div class="row"><div class="col-xs-10">
+                    <span class="inbox-sender">{{"Sender"}}</span><br>
+                    <span class="inbox-subject">{{ "Subject" }} -</span>
+                    <span class="inbox-content">{{ name | limitTo: 125 }}{{name.length + subject.length > 125 ? '...' : ''}}</span>
+                </div>
+                <!--time and date will be on the right of the message-->
+                <div class="col-xs-2 text-right">
+                    <span class="inbox-time">{{"2:03 PM"}}</span>
+                    <span class="inbox-date">{{"10/4/2022"}}</span>
+                </div>
+            </li>
+        </div> 
+    </ul>
+</div>

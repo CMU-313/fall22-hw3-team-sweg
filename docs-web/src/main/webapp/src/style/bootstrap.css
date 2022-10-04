@@ -290,6 +290,42 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+} 
+.inbox-card {
+  padding: 0px;
+  box-shadow: 0px !important;
+}
+.list-group {
+  margin: 0% !important;
+}
+.list-group li {
+  border-radius: 0px !important;
+  border-top: 0px;
+  border-right: 0px;
+  border-left:0px;
+}
+.list-group li:hover,
+.list-group li:focus{
+  background: rgb(230, 247, 255);
+}
+.inbox-sender {
+  font-size: 13px;
+  font-weight: bold;
+}
+.inbox-subject {
+  font-size: 12px;
+}
+.inbox-content {
+  color: grey;
+  font-size: 11px;
+}
+.inbox-time {
+  color: grey;
+  font-size: 11px;
+}
+.inbox-date {
+  color: grey;
+  font-size: 11px; 
 }
 a {
   color: #337ab7;
@@ -4945,7 +4981,7 @@ button.list-group-item-danger.active:focus {
 .well-lg {
   padding: 24px;
 }
-.well-sm {
+.well-sm { 
   padding: 9px;
 }
 .close {
