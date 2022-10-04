@@ -4,12 +4,12 @@
 <div class="inbox-card"> 
     <!--creates a card to better display each message-->
     <ul class="list-group list-group-flush">
-        <div ng-repeat="name in names">
+        <div ng-repeat="message in messages" ng-class="{ active: $stateParams.id == message.id }">
             <!--content and other information of messages-->
             <li class="list-group-item">
                 <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
                 <div class="row"><div class="col-xs-10">
-                    <span class="inbox-sender">{{"Sender"}}</span><br>
+                    <span class="inbox-sender">{{ "Sender" }}</span><br>
                     <span class="inbox-subject">{{ "Subject" }} -</span>
                     <span class="inbox-content">{{ name | limitTo: 125 }}{{name.length + subject.length > 125 ? '...' : ''}}</span>
                 </div>
