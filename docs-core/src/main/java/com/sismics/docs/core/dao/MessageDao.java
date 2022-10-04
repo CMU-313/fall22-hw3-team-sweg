@@ -51,7 +51,24 @@ public class MessageDao {
      */
     public int getUnreadMsgCount(String userId) {
         EntityManager em = ThreadLocalContext.get().getEntityManager();
-        Query q = em.createQuery("select count(m) from Message m where m.id = :userId and m.isRead = False");
-        return (int) q.getSingleResult();
+        Query q = em.createQuery("select count(m) from Message m where m.receiverId = :userId and m.isRead = False and m.deleteDate is null");
+        q.setParameter("userId", userId);
+        return ((Long) q.getSingleResult()).intValue();
+    }
+
+    /**
+     * Change status when message is read.
+     * 
+     * @param msgId Message ID
+     * @param userId User Id
+     * @return Existence of message
+     */
+    public boolean read(String msgId, String userId) {
+        Message message = getById(msgId);
+        if (message == null || message.getReceiverId() != userId) {
+            return false;
+        }
+        message.setIsRead(true);
+        return true;
     }
 }
