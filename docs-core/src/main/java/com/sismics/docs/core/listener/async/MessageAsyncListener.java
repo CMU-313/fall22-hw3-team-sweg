@@ -53,7 +53,7 @@ public class MessageAsyncListener {
             message.setType(MessageType.DOCUMENT_ASSIGNED);
             message.setDocumentId(event.getDocumentId());
             message.setSenderId(event.getUserId());
-            message.setReceiverId(event.getOwnerId());
+            message.setReceiverId(event.getAssigneeId());
             MessageDao messageDao = new MessageDao();
             messageDao.create(message);
 
