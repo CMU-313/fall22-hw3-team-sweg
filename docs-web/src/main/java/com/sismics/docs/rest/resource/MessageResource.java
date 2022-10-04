@@ -1,6 +1,9 @@
 package com.sismics.docs.rest.resource;
 
+import java.util.List;
+
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
@@ -10,7 +13,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.sismics.docs.core.dao.MessageDao;
+import com.sismics.docs.core.dao.dto.MessageDto;
 import com.sismics.docs.core.listener.async.MessageAsyncListener;
+import com.sismics.docs.core.util.jpa.SortCriteria;
 import com.sismics.rest.exception.ForbiddenClientException;
 
 /*
@@ -18,6 +23,24 @@ import com.sismics.rest.exception.ForbiddenClientException;
  */
 @Path("/messages")
 public class MessageResource extends BaseResource {
+    @GET
+    public Response list(@QueryParam("sort") Integer sortColumn, @QueryParam("asc") Boolean asc) {
+        if (!authenticate()) {
+            throw new ForbiddenClientException();
+        }
+
+        JsonArrayBuilder messages = Json.createArrayBuilder();
+        SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
+
+        MessageDao messageDao = new MessageDao();
+        List<MessageDto> messageDtoList = messageDao.findByCriteria(new MessageCritera(), sortCriteria);
+        for (GroupDto groupDto : groupDtoList) {
+            groups.add(Json.createObjectBuilder()
+                    .add("name", groupDto.getName())
+                    .add("parent", JsonUtil.nullable(groupDto.getParentName())));
+        }
+    }
+
     /**
      * Long poll the number of unread messages until there is one.
      *
