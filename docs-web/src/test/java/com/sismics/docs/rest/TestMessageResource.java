@@ -2,6 +2,7 @@ package com.sismics.docs.rest;
 
 import java.util.Date;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -51,6 +52,47 @@ public class TestMessageResource extends BaseJerseyTest {
                 .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
                 .get(JsonObject.class);
         Assert.assertEquals(1, json.getInt("count"));
+
+        // Get the list of messages without any criteria
+        json = target().path("/messages").request().cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
+                .get(JsonObject.class);
+        JsonArray messages = json.getJsonArray("messages");
+        Assert.assertEquals(1, messages.size());
+        String messageId = messages.getJsonObject(0).getString("id");
+
+        // Get the list of read messages
+        json = target().path("/messages")
+                .queryParam("isRead", true)
+                .request()
+                .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
+                .get(JsonObject.class);
+        messages = json.getJsonArray("messages");
+        Assert.assertEquals(0, messages.size());
+
+        // Get the list of DOCUMENT_COMMENTED messages
+        json = target().path("/messages")
+                .queryParam("type", "DOCUMENT_COMMENTED")
+                .request()
+                .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
+                .get(JsonObject.class);
+        messages = json.getJsonArray("messages");
+        Assert.assertEquals(1, messages.size());
+
+        // Read the unread message for document1
+        json = target().path("/messages/read")
+                .request()
+                .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
+                .post(Entity.form(new Form().param("id", messageId)), JsonObject.class);
+        Assert.assertEquals("ok", json.getString("status"));
+
+        // Get the list of read messages again
+        json = target().path("/messages")
+                .queryParam("isRead", true)
+                .request()
+                .cookie(TokenBasedSecurityFilter.COOKIE_NAME, document1Token)
+                .get(JsonObject.class);
+        messages = json.getJsonArray("messages");
+        Assert.assertEquals(1, messages.size());
     }
 }
 
