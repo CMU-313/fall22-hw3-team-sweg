@@ -14,7 +14,19 @@ public class MessageCriteria {
     /**
      * Is read.
      */
-    private boolean isRead;
+    private Boolean isRead;
+
+    /**
+     * Constructor of MessageCriteria.
+     */
+    public MessageCriteria(String type, Boolean isRead) {
+        if (type != null) {
+            this.type = MessageType.valueOf(type);
+        } else {
+            this.type = null;
+        }
+        this.isRead = isRead;
+    }
 
     public MessageType getType() {
         return type;
@@ -24,11 +36,11 @@ public class MessageCriteria {
         this.type = type;
     }
 
-    public boolean getIsRead() {
+    public Boolean getIsRead() {
         return isRead;
     }
 
-    public void setIsRead(final boolean isRead) {
+    public void setIsRead(final Boolean isRead) {
         this.isRead = isRead;
     }
 }

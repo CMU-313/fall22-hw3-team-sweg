@@ -2,6 +2,8 @@ package com.sismics.docs.core.dao.dto;
 
 import java.util.Date;
 
+import com.sismics.docs.core.constant.MessageType;
+
 /**
  * Message DTO.
  */
@@ -14,7 +16,7 @@ public class MessageDto {
     /**
      * Type.
      */
-    private String type;
+    private MessageType type;
 
     /**
      * Sender name.
@@ -40,11 +42,11 @@ public class MessageDto {
         return this;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
 
-    public MessageDto setType(final String type) {
+    public MessageDto setType(final MessageType type) {
         this.type = type;
         return this;
     }
