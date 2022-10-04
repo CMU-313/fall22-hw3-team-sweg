@@ -64,6 +64,24 @@ angular.module('docs',
         }
       }
     })
+    .state('inbox', {
+      url: '/inbox',
+      abstract: true,
+      views: {
+        'page': {
+          templateUrl: 'partial/docs/inbox.html',
+          controller: 'Inbox'
+        }
+      }
+    })
+    .state('inbox.default', {
+      url: '',
+      views: {
+        'tag': {
+          templateUrl: 'partial/docs/inbox.default.html'
+        }
+      }
+    })
     .state('settings', {
       url: '/settings',
       abstract: true,
@@ -418,6 +436,9 @@ angular.module('docs',
         }
       }
     });
+
+  // Testing if page url is correct, if it does not route correctly, user is sent to main page
+  $urlRouterProvider.otherwise("/document");
 
   // Configuring Restangular
   RestangularProvider.setBaseUrl('../api');

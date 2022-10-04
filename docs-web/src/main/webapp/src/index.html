@@ -77,6 +77,7 @@
     <script src="app/docs/controller/document/ModalFileVersions.js" type="text/javascript"></script>
     <script src="app/docs/controller/tag/Tag.js" type="text/javascript"></script>
     <script src="app/docs/controller/tag/TagEdit.js" type="text/javascript"></script>
+    <script src="app/docs/controller/inbox/Inbox.js" type="text/javascript"></script>
     <script src="app/docs/controller/settings/Settings.js" type="text/javascript"></script>
     <script src="app/docs/controller/settings/SettingsDefault.js" type="text/javascript"></script>
     <script src="app/docs/controller/settings/SettingsAccount.js" type="text/javascript"></script>
@@ -147,6 +148,11 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right" ng-show="!userInfo.anonymous">
+          <!--Added a new icon that is a drop down inbox for the user, guests cannot see inbox
+            ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'"-->
+          <li ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'">
+            <a href="#/inbox"><span class="fas fa-cog"></span> Inbox</a>
+          </li>
           <li>
             <a href="{{ userInfo.username == 'guest' ? '#/user/guest' : '#/settings/account' }}"
                translate-attr="{ title: 'index.logged_as' }" translate-values="{ username: userInfo.username }">
