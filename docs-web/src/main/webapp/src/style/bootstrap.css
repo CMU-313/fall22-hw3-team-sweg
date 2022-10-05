@@ -315,18 +315,6 @@ textarea {
 .inbox-subject {
   font-size: 12px;
 }
-.inbox-content {
-  color: grey;
-  font-size: 11px;
-}
-.inbox-time {
-  color: grey;
-  font-size: 11px;
-}
-.inbox-date {
-  color: grey;
-  font-size: 11px; 
-}
 a {
   color: #337ab7;
   text-decoration: none;
