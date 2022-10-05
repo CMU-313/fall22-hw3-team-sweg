@@ -18,6 +18,8 @@ angular.module('docs').controller('Navigation', function($scope, $state, $stateP
     }
   });
 
+  $scope.unreadCount = 1;
+
   /**
    * User logout.
    */
