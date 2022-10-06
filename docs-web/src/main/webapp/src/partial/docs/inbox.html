@@ -5,22 +5,21 @@
     <ul class="list-group list-group-flush">
         <div ng-repeat="message in messages"> <!--ng-class="{ active: $stateParams.id == message.id }"-->
             <!--content and other information of messages-->
-            <li class="list-group-item">
+            <a href="#/document/"><li class="list-group-item">
                 <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
                 <div class="row"><div class="col-xs-10">
                     <span class="inbox-sender">{{ message.sender }}</span><br>
                     <span class="inbox-subject">
-                        {{ message.}}
-                        <span *ngIf="message.type == 'DOCUMENT_COMMENTED'">Comment left on Document</span>
-                        <span *ngIf="message.type == 'DOCUMENT_ASSIGNED'">Assigned to Document</span>
-                        <span *ngIf="message.type == 'DOCUMENT_REVIEWED'">Document was Reviewed</span>
+                        <span [ngIf]="message.type === 'DOCUMENT_COMMENTED'">Comment left on Document</span>
+                        <!-- <span [ngIf]="message.type === 'DOCUMENT_ASSIGNED'">Assigned to Document</span>
+                        <span [ngIf]="message.type === 'DOCUMENT_REVIEWED'">Document was Reviewed</span> -->
                     </span>
                 </div>
                 <!--time and date will be on the right of the message-->
                 <div class="col-xs-2 text-right">
                     <span class="inbox-timestamp">{{ message.timestamp }}</span>
                 </div>
-            </li>
+            </li></a>
         </div> 
     </ul>
 </div>
