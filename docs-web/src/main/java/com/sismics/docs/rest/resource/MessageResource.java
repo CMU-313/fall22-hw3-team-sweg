@@ -91,10 +91,12 @@ public class MessageResource extends BaseResource {
      * @apiError (client) ForbiddenError Access denied
      * @apiPermission user
      * @apiVersion 1.5.0
+     * 
+     * @param count Current number of unread messages
      */
     @GET
     @Path("unread_count")
-    public void getUnreadCount(@Suspended final AsyncResponse asyncResponse)
+    public void getUnreadCount(@QueryParam("count") Integer count, @Suspended final AsyncResponse asyncResponse)
             throws InterruptedException {
         if (!authenticate()) {
             throw new ForbiddenClientException();
@@ -103,7 +105,7 @@ public class MessageResource extends BaseResource {
         String userId = principal.getId();
         MessageDao messageDao = new MessageDao();
         int unreadCount = messageDao.getUnreadMsgCount(userId);
-        if (unreadCount > 0) {
+        if (unreadCount > 0 && unreadCount != count) {
             JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
             asyncResponse.resume(Response.ok().entity(responseObj).build());
         } else if (MessageAsyncListener.isClientRegistered(userId)) {

@@ -149,9 +149,12 @@
 
         <ul class="nav navbar-nav navbar-right" ng-show="!userInfo.anonymous">
           <!--Added a new icon that is a drop down inbox for the user, guests cannot see inbox
-            ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'"-->
+            ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'"-->        
           <li ui-sref-active="{ active: 'inbox.**' }" ng-show="userInfo.username != 'guest'">
-            <a href="#/inbox"> Inbox</a>
+            <a href="#/inbox">Inbox
+              <p style="display: inline; border-radius: 50%; background-color: red; padding: 3px 6px; color: white;"
+              ng-if="unreadCount != 0"> {{ unreadCount }}</p> 
+            </a>
           </li>
           <li>
             <a href="{{ userInfo.username == 'guest' ? '#/user/guest' : '#/settings/account' }}"
