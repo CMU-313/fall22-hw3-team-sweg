@@ -128,6 +128,7 @@ public class MessageDao {
                     .setId((String) o[i++])
                     .setType(MessageType.valueOf((String) o[i++]))
                     .setSender((String) o[i++])
+                    .setDocumentId((String) o[i++])
                     .setIsRead((boolean) o[i++])
                     .setTimestamp((Date) o[i++]);
             messageDtoList.add(messageDto);

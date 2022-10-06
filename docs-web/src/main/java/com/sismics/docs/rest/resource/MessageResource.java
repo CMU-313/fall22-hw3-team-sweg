@@ -74,6 +74,7 @@ public class MessageResource extends BaseResource {
                     .add("id", messageDto.getId())
                     .add("type", messageDto.getType().name())
                     .add("sender", messageDto.getSender())
+                    .add("documentId",messageDto.getDocumentId())
                     .add("isRead", messageDto.getIsRead())
                     .add("timestamp", dateFormat.format(messageDto.getTimestamp())));
         }
