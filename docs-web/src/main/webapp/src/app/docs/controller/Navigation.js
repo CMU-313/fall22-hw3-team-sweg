@@ -3,7 +3,7 @@
 /**
  * Navigation controller.
  */
-angular.module('docs').controller('Navigation', function($scope, $state, $stateParams, $rootScope, User) {
+angular.module('docs').controller('Navigation', function($scope, $state, $stateParams, $rootScope, User, Restangular) {
   User.userInfo().then(function(data) {
     $rootScope.userInfo = data;
     if (data.anonymous) {
@@ -18,7 +18,14 @@ angular.module('docs').controller('Navigation', function($scope, $state, $stateP
     }
   });
 
-  $scope.unreadCount = 1;
+  $scope.unreadCount = 0;
+  async function getUnreadMessageCount() {
+    let response = await Restangular.one("messages", "unread_count").get({count: $scope.unreadCount});
+    $scope.unreadCount = response.count;
+    await getUnreadMessageCount();
+  }
+
+  getUnreadMessageCount();
 
   /**
    * User logout.
