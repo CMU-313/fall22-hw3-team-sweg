@@ -11,6 +11,7 @@ import com.sismics.docs.core.dao.dto.GroupDto;
 import com.sismics.docs.core.dao.dto.UserDto;
 import com.sismics.docs.core.event.AclCreatedAsyncEvent;
 import com.sismics.docs.core.event.AclDeletedAsyncEvent;
+import com.sismics.docs.core.event.DocumentAssignedAsyncEvent;
 import com.sismics.docs.core.model.jpa.Acl;
 import com.sismics.docs.core.model.jpa.Document;
 import com.sismics.docs.core.model.jpa.Tag;
@@ -107,6 +108,15 @@ public class AclResource extends BaseResource {
             event.setPerm(perm);
             event.setTargetId(targetId);
             ThreadLocalContext.get().addAsyncEvent(event);
+
+            if (type == AclTargetType.USER) {
+                // Raise a document assigned event
+                DocumentAssignedAsyncEvent documentAssignedEvent = new DocumentAssignedAsyncEvent();
+                documentAssignedEvent.setUserId(principal.getId());
+                documentAssignedEvent.setAssigneeId(targetId);
+                documentAssignedEvent.setDocumentId(sourceId);
+                ThreadLocalContext.get().addAsyncEvent(documentAssignedEvent);
+            }
 
             // Returns the ACL
             JsonObjectBuilder response = Json.createObjectBuilder()
