@@ -125,6 +125,10 @@ public class MessageAsyncListener {
      *                      user
      */
     public static void registerClient(final String userId, final AsyncResponse asyncResponse) {
+        clients.computeIfPresent(userId, (k, v) -> {
+            v.cancel();
+            return null;
+        });
         clients.put(userId, asyncResponse);
     }
 
