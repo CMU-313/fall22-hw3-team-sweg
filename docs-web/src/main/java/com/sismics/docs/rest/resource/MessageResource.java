@@ -60,7 +60,7 @@ public class MessageResource extends BaseResource {
         JsonArrayBuilder messages = Json.createArrayBuilder();
         if (sortColumn == null) {
             // Sort by timestamp by default
-            sortColumn = 4;
+            sortColumn = 5;
             asc = false;
         }
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
