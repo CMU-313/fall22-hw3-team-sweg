@@ -24,6 +24,11 @@ public class MessageDto {
     private String sender;
 
     /**
+     * Document ID.
+     */
+    private String documentId;
+
+    /**
      * Is read.
      */
     private boolean isRead;
@@ -57,6 +62,15 @@ public class MessageDto {
 
     public MessageDto setSender(final String sender) {
         this.sender = sender;
+        return this;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public MessageDto setDocumentId(final String documentId) {
+        this.documentId = documentId;
         return this;
     }
 
