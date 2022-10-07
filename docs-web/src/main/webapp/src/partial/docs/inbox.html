@@ -13,8 +13,10 @@
                         <div class="col-xs-9">
                             <span class="inbox-sender">{{ message.sender }}</span><br>
                             <span class="inbox-subject">
-                                <span ng-If="message.type === 'DOCUMENT_COMMENTED'">Comment left on Document</span>
-                                <span ng-If="message.type === 'DOCUMENT_ASSIGNED'">Assigned to Document</span>
+                                <span ng-If="message.type === 'DOCUMENT_COMMENTED'">Comment left on document &lt;{{
+                                    message.documentTitle }}&gt;</span>
+                                <span ng-If="message.type === 'DOCUMENT_ASSIGNED'">Assigned to document &lt;{{
+                                    message.documentTitle }}&gt;</span>
                             </span>
                         </div>
                         <!--time and date will be on the right of the message-->

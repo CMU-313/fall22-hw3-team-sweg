@@ -29,6 +29,11 @@ public class MessageDto {
     private String documentId;
 
     /**
+     * Document title. 
+     */
+    private String documentTitle;
+
+    /**
      * Is read.
      */
     private boolean isRead;
@@ -74,6 +79,15 @@ public class MessageDto {
         return this;
     }
 
+    public String getDocumentTitle() {
+        return documentTitle;
+    }
+
+    public MessageDto setDocumentTitle(final String documentTitle) {
+        this.documentTitle = documentTitle;
+        return this;
+    }
+    
     public boolean getIsRead() {
         return isRead;
     }

@@ -18,6 +18,7 @@ import com.sismics.docs.core.dao.dto.MessageDto;
 import com.sismics.docs.core.listener.async.MessageAsyncListener;
 import com.sismics.docs.core.util.jpa.SortCriteria;
 import com.sismics.rest.exception.ForbiddenClientException;
+import com.sismics.util.JsonUtil;
 
 /*
  * Message REST resources.
@@ -60,7 +61,7 @@ public class MessageResource extends BaseResource {
         JsonArrayBuilder messages = Json.createArrayBuilder();
         if (sortColumn == null) {
             // Sort by timestamp by default
-            sortColumn = 5;
+            sortColumn = 6;
             asc = false;
         }
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
@@ -74,7 +75,8 @@ public class MessageResource extends BaseResource {
                     .add("id", messageDto.getId())
                     .add("type", messageDto.getType().name())
                     .add("sender", messageDto.getSender())
-                    .add("documentId",messageDto.getDocumentId())
+                    .add("documentId", messageDto.getDocumentId())
+                    .add("documentTitle", JsonUtil.nullable(messageDto.getDocumentTitle()))
                     .add("isRead", messageDto.getIsRead())
                     .add("timestamp", dateFormat.format(messageDto.getTimestamp())));
         }
