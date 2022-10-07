@@ -3,7 +3,7 @@
 <div class="inbox-card"> 
     <!--creates a card to better display each message-->
     <ul class="list-group list-group-flush">
-        <div ng-repeat="message in messages">
+        <div ng-repeat="message in messages | orderBy:'':true">
             <!--link, content and other information of messages-->
             <a ng-href="#/document/view/{{message.documentId}}/content"><li class="list-group-item">
                 <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
