@@ -60,7 +60,7 @@ public class MessageResource extends BaseResource {
         JsonArrayBuilder messages = Json.createArrayBuilder();
         if (sortColumn == null) {
             // Sort by timestamp by default
-            sortColumn = 4;
+            sortColumn = 5;
             asc = false;
         }
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
@@ -68,7 +68,7 @@ public class MessageResource extends BaseResource {
 
         MessageDao messageDao = new MessageDao();
         List<MessageDto> messageDtoList = messageDao.findByCriteria(principal.getId(), messageCriteria, sortCriteria);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss a");
         for (MessageDto messageDto : messageDtoList) {
             messages.add(Json.createObjectBuilder()
                     .add("id", messageDto.getId())
