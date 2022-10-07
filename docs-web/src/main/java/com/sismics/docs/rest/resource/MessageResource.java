@@ -109,8 +109,6 @@ public class MessageResource extends BaseResource {
         if (unreadCount > 0 && unreadCount != count) {
             JsonObject responseObj = Json.createObjectBuilder().add("count", unreadCount).build();
             asyncResponse.resume(Response.ok().entity(responseObj).build());
-        } else if (MessageAsyncListener.isClientRegistered(userId)) {
-            asyncResponse.cancel();
         } else {
             MessageAsyncListener.registerClient(userId, asyncResponse);
         }
