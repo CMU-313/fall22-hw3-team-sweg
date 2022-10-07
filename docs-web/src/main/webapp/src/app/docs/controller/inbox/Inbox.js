@@ -14,4 +14,7 @@ angular.module('docs').controller('Inbox', function($scope, Restangular) {
 
     $scope.loadMessages();
 
+    $scope.readMessage = function(msgId) {
+        Restangular.one('messages', 'read').post('', {id: msgId});
+    };
 });
