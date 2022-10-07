@@ -3,21 +3,20 @@
 <div class="inbox-card"> 
     <!--creates a card to better display each message-->
     <ul class="list-group list-group-flush">
-        <div ng-repeat="message in messages"> <!--ng-class="{ active: $stateParams.id == message.id }"-->
-            <!--content and other information of messages-->
-            <a href="#/document/"><li class="list-group-item">
+        <div ng-repeat="message in messages">
+            <!--link, content and other information of messages-->
+            <a ng-href="#/document/view/{{message.documentId}}/content"><li class="list-group-item">
                 <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
-                <div class="row"><div class="col-xs-10">
+                <div class="row"><div class="col-xs-9">
                     <span class="inbox-sender">{{ message.sender }}</span><br>
                     <span class="inbox-subject">
-                        <span [ngIf]="message.type === 'DOCUMENT_COMMENTED'">Comment left on Document</span>
-                        <!-- <span [ngIf]="message.type === 'DOCUMENT_ASSIGNED'">Assigned to Document</span>
-                        <span [ngIf]="message.type === 'DOCUMENT_REVIEWED'">Document was Reviewed</span> -->
+                        <span ng-If="message.type === 'DOCUMENT_COMMENTED'">Comment left on Document</span>
+                        <span ng-If="message.type === 'DOCUMENT_ASSIGNED'">Assigned to Document</span>
                     </span>
                 </div>
                 <!--time and date will be on the right of the message-->
-                <div class="col-xs-2 text-right">
-                    <span class="inbox-timestamp">{{ message.timestamp }}</span>
+                <div class="col-xs-3 text-right">
+                    <span class="inbox-timestamp">{{ message.timestamp | date : format :-0500 }}</span>
                 </div>
             </li></a>
         </div> 

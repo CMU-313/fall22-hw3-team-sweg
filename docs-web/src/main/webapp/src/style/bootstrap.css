@@ -309,10 +309,16 @@ textarea {
   background: rgb(230, 247, 255);
 }
 .inbox-sender {
+  color: black !important;
   font-size: 13px;
   font-weight: bold;
 }
 .inbox-subject {
+  color: black !important;
+  font-size: 12px;
+}
+.inbox-timestamp {
+  color: grey !important;
   font-size: 12px;
 }
 a {
