@@ -5,7 +5,8 @@
     <ul class="list-group list-group-flush">
         <div ng-repeat="message in messages">
             <!--link, content and other information of messages-->
-            <a ng-href="#/document/view/{{message.documentId}}/content" ng-click="readMessage(message.id)">
+            <a ng-click="readMessage(message.id)" ng-href="#/document/view/{{message.documentId}}/content"
+                ng-style="message.isRead ? {'font-weight':'light'} : {'font-weight':'bolder'}">
                 <li class="list-group-item">
                     <!--sender, subject, and content will be on the left of the message, limit subject and content length for consistency-->
                     <div class="row">
