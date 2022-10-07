@@ -97,7 +97,7 @@ public class MessageDao {
         Map<String, Object> parameterMap = new HashMap<String, Object>();
 
         StringBuilder sb = new StringBuilder(
-                "select m.MSG_ID_C as c0, m.MSG_TYPE_C as c1, u.USE_USERNAME_C as c2, m.MSG_ISREAD_B as c3, m.MSG_CREATETIME_D as c4 from T_MESSAGES m join T_USER u on u.USE_ID_C = m.MSG_IDSENDER_C");
+                "select m.MSG_ID_C as c0, m.MSG_TYPE_C as c1, u.USE_USERNAME_C as c2, m.MSG_IDDOCUMENT_C as c3, m.MSG_ISREAD_B as c4, m.MSG_CREATETIME_D as c5 from T_MESSAGES m join T_USER u on u.USE_ID_C = m.MSG_IDSENDER_C");
         criteriaList.add("m.MSG_IDRECEIVER_C = :userId");
         parameterMap.put("userId", userId);
 
@@ -128,6 +128,7 @@ public class MessageDao {
                     .setId((String) o[i++])
                     .setType(MessageType.valueOf((String) o[i++]))
                     .setSender((String) o[i++])
+                    .setDocumentId((String) o[i++])
                     .setIsRead((boolean) o[i++])
                     .setTimestamp((Date) o[i++]);
             messageDtoList.add(messageDto);
